@@ -58,4 +58,33 @@ class DiscogsServiceTest extends TestCase
         $response = $service->releaseRatings('test', 'user');
         $this->assertEquals(['foo' => 'bar'], $response);
     }
+
+    /** @test */
+    public function itCanGetTheStatsForARelease(): void {
+        $endpoint = DiscogsService::BASE_URL . DiscogsService::RELEASES_ENDPOINT . '/test/stats';
+        Http::fake([$endpoint => Http::response(['foo' => 'bar'], 200)]);
+        $service = app()->make(DiscogsService::class);
+        $response = $service->releaseStats('test');
+        $this->assertEquals(['foo' => 'bar'], $response);
+    }
+
+    /** @test */
+    public function itCanGetAMasterRelease(): void
+    {
+        $endpoint = DiscogsService::BASE_URL . DiscogsService::MASTERS_ENDPOINT . '/test';
+        Http::fake([$endpoint => Http::response(['foo' => 'bar'], 200)]);
+        $service = app()->make(DiscogsService::class);
+        $response = $service->masterRelease('test');
+        $this->assertEquals(['foo' => 'bar'], $response);
+    }
+
+    /** @test */
+    public function itCanGetMasterReleaseVersions(): void
+    {
+        $endpoint = DiscogsService::BASE_URL . DiscogsService::MASTERS_ENDPOINT . '/test/versions';
+        Http::fake([$endpoint => Http::response(['foo' => 'bar'], 200)]);
+        $service = app()->make(DiscogsService::class);
+        $response = $service->masterReleaseVersions('test');
+        $this->assertEquals(['foo' => 'bar'], $response);
+    }
 }
