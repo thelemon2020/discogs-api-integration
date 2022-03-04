@@ -20,8 +20,10 @@ class DiscogsService
         return $this->createRequest()->get(self::RELEASES_ENDPOINT . '/' . $releaseId)->json();
     }
 
-    public function releaseRatings(string $releaseId): array
+    public function releaseRatings(string $releaseId, ?string $user = null): array
     {
-        return $this->createRequest()->get(self::RELEASES_ENDPOINT . '/' . $releaseId . '/ratings')->json();
+        $url = self::RELEASES_ENDPOINT . '/' . $releaseId . '/ratings';
+        $url = $user ? $url . '/' . $user : $url;
+        return $this->createRequest()->get($url)->json();
     }
 }

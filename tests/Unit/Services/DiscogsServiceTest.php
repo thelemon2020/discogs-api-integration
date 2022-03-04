@@ -48,4 +48,14 @@ class DiscogsServiceTest extends TestCase
         $response = $service->releaseRatings('test');
         $this->assertEquals(['foo' => 'bar'], $response);
     }
+
+    /** @test */
+    public function itCanGetRatingsForAReleaseByUser(): void
+    {
+        $endpoint = DiscogsService::BASE_URL . DiscogsService::RELEASES_ENDPOINT . '/test/ratings/user';
+        Http::fake([$endpoint => Http::response(['foo' => 'bar'], 200)]);
+        $service = app()->make(DiscogsService::class);
+        $response = $service->releaseRatings('test', 'user');
+        $this->assertEquals(['foo' => 'bar'], $response);
+    }
 }
