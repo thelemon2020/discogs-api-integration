@@ -15,10 +15,13 @@ class DiscogsService
         return Http::baseUrl(self::BASE_URL);
     }
 
-    public function releases(?string $releaseId = null): array
+    public function release(string $releaseId): array
     {
-        return $this->createRequest()->get(
-            self::RELEASES_ENDPOINT . ($releaseId !== null ? ('/' . $releaseId) : '')
-        )->json();
+        return $this->createRequest()->get(self::RELEASES_ENDPOINT . '/' . $releaseId)->json();
+    }
+
+    public function releases(): array
+    {
+        return $this->createRequest()->get(self::RELEASES_ENDPOINT)->json();
     }
 }
