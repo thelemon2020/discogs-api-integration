@@ -18,6 +18,15 @@ class DiscogsService
         return Http::baseUrl(self::BASE_URL);
     }
 
+    private function buildUrl(string $baseUrl): string
+    {
+        if($this->queryParams) {
+            $baseUrl .= '?' . http_build_query($this->queryParams);
+        }
+        $this->queryParams = [];
+        return $baseUrl;
+    }
+
     public function page(int $page = 1): DiscogsService
     {
         $this->queryParams['page'] = $page;
@@ -55,11 +64,7 @@ class DiscogsService
 
     public function masterReleaseVersions(string $releaseId)
     {
-        $url = self::MASTERS_ENDPOINT . '/' . $releaseId . '/versions';
-
-        if($this->queryParams) {
-            $url .= '?' . http_build_query($this->queryParams);
-        }
+        $url = $this->buildUrl(self::MASTERS_ENDPOINT . '/' . $releaseId . '/versions');
 
         return $this->createRequest()->get($url)->json();
     }

@@ -97,4 +97,20 @@ class DiscogsServiceTest extends TestCase
         $response = $service->page(2)->perPage(8)->masterReleaseVersions('test');
         $this->assertEquals(['foo' => 'bar'], $response);
     }
+
+    /** @test */
+    public function itResetsTheQueryArrayAfterARequest(): void
+    {
+        $firstEndpoint = DiscogsService::BASE_URL  .DiscogsService::MASTERS_ENDPOINT . '/test/versions?page=2&per_page=10';
+        $secondEndpoint = DiscogsService::BASE_URL  .DiscogsService::MASTERS_ENDPOINT . '/test/versions';
+        Http::fake([
+            $firstEndpoint => Http::response(['foo' => 'bar'], 200),
+            $secondEndpoint => Http::response(['bar' => 'foo'], 200),
+        ]);
+        $service = app()->make(DiscogsService::class);
+        $response = $service->page(2)->perPage(10)->masterReleaseVersions('test');
+        $responseTwo = $service->masterReleaseVersions('test');
+        $this->assertEquals(['foo' => 'bar'], $response);
+        $this->assertEquals(['bar' => 'foo'], $responseTwo);
+    }
 }
