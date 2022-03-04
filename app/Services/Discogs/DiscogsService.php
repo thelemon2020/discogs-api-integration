@@ -20,7 +20,7 @@ class DiscogsService
         return $this->createRequest()->get(self::RELEASES_ENDPOINT . '/' . $releaseId)->json();
     }
 
-    public function releases(): array
+    public function releaseRatings(string $releaseId): array
     {
         return $this->createRequest()->get(self::RELEASES_ENDPOINT)->json();
     }
