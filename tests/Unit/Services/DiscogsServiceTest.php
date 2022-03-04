@@ -40,13 +40,12 @@ class DiscogsServiceTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetMultipleReleases(): void
+    public function itCanGetRatingsForARelease(): void
     {
-        Http::fake([
-            DiscogsService::BASE_URL . DiscogsService::RELEASES_ENDPOINT => Http::response(['foo' => 'bar'], 200)
-        ]);
+        $endpoint = DiscogsService::BASE_URL . DiscogsService::RELEASES_ENDPOINT . '/test/ratings';
+        Http::fake([$endpoint => Http::response(['foo' => 'bar'], 200)]);
         $service = app()->make(DiscogsService::class);
-        $response = $service->releases();
+        $response = $service->releaseRatings('test');
         $this->assertEquals(['foo' => 'bar'], $response);
     }
 }

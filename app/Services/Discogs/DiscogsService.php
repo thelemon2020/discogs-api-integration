@@ -22,6 +22,6 @@ class DiscogsService
 
     public function releaseRatings(string $releaseId): array
     {
-        return $this->createRequest()->get(self::RELEASES_ENDPOINT)->json();
+        return $this->createRequest()->get(self::RELEASES_ENDPOINT . '/' . $releaseId . '/ratings')->json();
     }
 }
