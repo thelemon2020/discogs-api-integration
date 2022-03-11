@@ -152,4 +152,23 @@ class DiscogsServiceTest extends TestCase
         $response = $service->artist('test');
         $this->assertEquals(['foo' => 'bar'], $response);
     }
+
+    /** @test */
+    public function itCanGetArtistReleases(): void
+    {
+        $endpoint = DiscogsService::BASE_URL . DiscogsService::ARTIST_ENDPOINT . '/test' . '/releases';
+        Http::fake([$endpoint => Http::response(['foo' => 'bar'], 200)]);
+        $service = app()->make(DiscogsService::class);
+        $response = $service->artistReleases('test');
+        $this->assertEquals(['foo' => 'bar'], $response);
+    }
+    /** @test */
+    public function itCanGetArtistReleasesWithSorting(): void
+    {
+        $endpoint = DiscogsService::BASE_URL . DiscogsService::ARTIST_ENDPOINT . '/test' . '/releases?sort=year';
+        Http::fake([$endpoint => Http::response(['foo' => 'bar'], 200)]);
+        $service = app()->make(DiscogsService::class);
+        $response = $service->query('sort', 'year')->artistReleases('test');
+        $this->assertEquals(['foo' => 'bar'], $response);
+    }
 }

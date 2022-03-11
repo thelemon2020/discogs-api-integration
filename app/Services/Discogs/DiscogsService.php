@@ -88,4 +88,10 @@ class DiscogsService
         $url = self::ARTIST_ENDPOINT . '/' . $artistId;
         return $this->createRequest()->get($url)->json();
     }
+
+    public function artistReleases(string $artistId)
+    {
+        $url = $this->buildUrl(self::ARTIST_ENDPOINT . '/' . $artistId . '/releases');
+        return $this->createRequest()->get($url)->json();
+    }
 }
