@@ -12,6 +12,7 @@ class DiscogsService
     const MASTERS_ENDPOINT = '/masters';
     const ARTIST_ENDPOINT = '/artists';
     const LABEL_ENDPOINT = '/labels';
+    const SEARCH_ENDPOINT = '/database/search';
 
     private array $queryParams = [];
 
@@ -105,5 +106,11 @@ class DiscogsService
     public function labelReleases(string $labelId) {
         $url = $this->buildUrl(self::LABEL_ENDPOINT . '/' . $labelId . '/releases');
         return $this->createRequest()->get($url)->json();
+    }
+
+    public function search(string $query)
+    {
+        $this->query('q', $query);
+        return $this->createRequest()->get($this->buildUrl(self::SEARCH_ENDPOINT))->json();
     }
 }

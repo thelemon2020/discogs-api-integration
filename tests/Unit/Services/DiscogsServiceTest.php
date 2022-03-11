@@ -191,4 +191,14 @@ class DiscogsServiceTest extends TestCase
         $response = $service->labelReleases('test');
         $this->assertEquals(['foo' => 'bar'], $response);
     }
+
+    /** @test */
+    public function itCanSearch(): void
+    {
+        $endpoint = DiscogsService::BASE_URL . DiscogsService::SEARCH_ENDPOINT . '?type=artist&year=1983&q=rivia';
+        Http::fake([$endpoint => Http::response(['foo' => 'bar'], 200)]);
+        $service = app()->make(DiscogsService::class);
+        $response = $service->queries(['type' => 'artist', 'year' => '1983'])->search('rivia');
+        $this->assertEquals(['foo' => 'bar'], $response);
+    }
 }
