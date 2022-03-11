@@ -10,6 +10,7 @@ class DiscogsService
     const BASE_URL = 'https://api.discogs.com';
     const RELEASES_ENDPOINT = '/releases';
     const MASTERS_ENDPOINT = '/masters';
+    const ARTIST_ENDPOINT = '/artist';
 
     private array $queryParams = [];
 
@@ -79,6 +80,12 @@ class DiscogsService
     {
         $url = $this->buildUrl(self::MASTERS_ENDPOINT . '/' . $releaseId . '/versions');
 
+        return $this->createRequest()->get($url)->json();
+    }
+
+    public function artist(string $artistId)
+    {
+        $url = self::ARTIST_ENDPOINT . '/' . $artistId;
         return $this->createRequest()->get($url)->json();
     }
 }
