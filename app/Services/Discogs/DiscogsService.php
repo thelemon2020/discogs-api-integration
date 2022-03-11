@@ -10,7 +10,8 @@ class DiscogsService
     const BASE_URL = 'https://api.discogs.com';
     const RELEASES_ENDPOINT = '/releases';
     const MASTERS_ENDPOINT = '/masters';
-    const ARTIST_ENDPOINT = '/artist';
+    const ARTIST_ENDPOINT = '/artists';
+    const LABEL_ENDPOINT = '/labels';
 
     private array $queryParams = [];
 
@@ -92,6 +93,17 @@ class DiscogsService
     public function artistReleases(string $artistId)
     {
         $url = $this->buildUrl(self::ARTIST_ENDPOINT . '/' . $artistId . '/releases');
+        return $this->createRequest()->get($url)->json();
+    }
+
+    public function label(string $labelId)
+    {
+        $url = self::LABEL_ENDPOINT . '/' . $labelId;
+        return $this->createRequest()->get($url)->json();
+    }
+
+    public function labelReleases(string $labelId) {
+        $url = $this->buildUrl(self::LABEL_ENDPOINT . '/' . $labelId . '/releases');
         return $this->createRequest()->get($url)->json();
     }
 }
