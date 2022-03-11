@@ -60,7 +60,8 @@ class DiscogsServiceTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetTheStatsForARelease(): void {
+    public function itCanGetTheStatsForARelease(): void
+    {
         $endpoint = DiscogsService::BASE_URL . DiscogsService::RELEASES_ENDPOINT . '/test/stats';
         Http::fake([$endpoint => Http::response(['foo' => 'bar'], 200)]);
         $service = app()->make(DiscogsService::class);
@@ -101,8 +102,8 @@ class DiscogsServiceTest extends TestCase
     /** @test */
     public function itResetsTheQueryArrayAfterARequest(): void
     {
-        $firstEndpoint = DiscogsService::BASE_URL  .DiscogsService::MASTERS_ENDPOINT . '/test/versions?page=2&per_page=10';
-        $secondEndpoint = DiscogsService::BASE_URL  .DiscogsService::MASTERS_ENDPOINT . '/test/versions';
+        $firstEndpoint = DiscogsService::BASE_URL . DiscogsService::MASTERS_ENDPOINT . '/test/versions?page=2&per_page=10';
+        $secondEndpoint = DiscogsService::BASE_URL . DiscogsService::MASTERS_ENDPOINT . '/test/versions';
         Http::fake([
             $firstEndpoint => Http::response(['foo' => 'bar'], 200),
             $secondEndpoint => Http::response(['bar' => 'foo'], 200),
@@ -112,5 +113,33 @@ class DiscogsServiceTest extends TestCase
         $responseTwo = $service->masterReleaseVersions('test');
         $this->assertEquals(['foo' => 'bar'], $response);
         $this->assertEquals(['bar' => 'foo'], $responseTwo);
+    }
+
+    /** @test */
+    public function itCanUseACustomQueryString(): void
+    {
+        $endpoint = DiscogsService::BASE_URL . DiscogsService::MASTERS_ENDPOINT . '/test/versions?format=vinyl';
+        Http::fake([
+            $endpoint => Http::response(['foo' => 'bar'], 200),
+        ]);
+
+        $service = app()->make(DiscogsService::class);
+        $response = $service->query('format', 'vinyl')->masterReleaseVersions('test');
+        $this->assertEquals(['foo' => 'bar'], $response);
+    }
+
+    /** @test */
+    public function itCanUseMoreThanOneCustomValueInQueryString(): void
+    {
+        $endpoint = DiscogsService::BASE_URL . DiscogsService::MASTERS_ENDPOINT
+            . '/test/versions?key=value&growth=session';
+
+        Http::fake([
+            $endpoint => Http::response(['foo' => 'bar'], 200),
+        ]);
+
+        $service = app()->make(DiscogsService::class);
+        $response = $service->queries(['key' => 'value', 'growth' => 'session'])->masterReleaseVersions('test');
+        $this->assertEquals(['foo' => 'bar'], $response);
     }
 }
